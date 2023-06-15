@@ -1,0 +1,42 @@
+  				.data
+fibonacci_num:	.word 12
+first_string:	.asciiz "The fibonacci number "
+second_string:	.asciiz " is "
+
+				.text
+main:
+			add $s0, $zero, $zero	
+			la $s1, fibonacci_num
+			lw $s1, ($s1)
+			li $t3, -1
+			add $s1, $s1, $t3
+			li $t0, 0
+			li $t1, 0
+			li $t2, 1
+			
+loop:		bne $t0, $s1, l
+			j exit
+l:			add $s0, $t1, $t2
+			move $t1, $t2
+			move $t2, $s0	
+		 	addi $t0, 1
+			j loop
+exit:
+			la $a0, first_string
+			li $v0, 4
+			syscall
+			la $s1, fibonacci_num
+			lw $s1, ($s1)
+			move $a0, $s1
+			li $v0, 1
+			syscall		
+			la $a0, second_string
+			li $v0, 4
+			syscall
+			move $a0, $s0
+			li $v0, 1
+			syscall					# print the result integer stored in $a0
+			
+   			li $v0, 10              # terminate program
+    		syscall                 # Exit 
+    		

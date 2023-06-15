@@ -1,0 +1,101 @@
+				.data			
+x:				.word 125
+y:				.word 83
+
+msg1:			.asciiz "The sum of squares of "
+msg2:			.asciiz " and "
+msg3:			.asciiz " is "
+
+				.text
+main:
+			la $s0, x
+			lw $s0, ($s0)
+			la $s1, y
+			lw $s1, ($s1)
+			
+			move $a0, $s0
+			move $a1, $s1
+						
+			jal sum_product
+			
+			move $t0, $v0
+			
+			la $t1, msg1
+			move $a0, $t1
+			li $v0, 4
+			syscall
+			
+			move $a0, $s0
+			li $v0, 1
+			syscall
+			
+			la $t1, msg2
+			move $a0, $t1
+			li $v0, 4
+			syscall
+			
+			move $a0, $s1
+			li $v0, 1
+			syscall
+			
+			la $t1, msg3
+			move $a0, $t1
+			li $v0, 4
+			syscall
+			
+			move $a0, $t0
+			li $v0, 1
+			syscall
+			
+			li $v0, 10
+			syscall
+			
+sum_product:
+			add $t0, $zero, $zero
+			
+			addi $sp, -8
+			sw $s0, 6($sp)
+			sw $ra, 4($sp)
+			sw $a1, 2($sp)
+			sw $a0, 0($sp)
+			
+			add $s0, $zero, $zero
+			
+			lw $a0, 0($sp)
+			jal square
+
+			add $s0, $s0, $v0
+			
+			lw $a0, 2($sp)
+			jal square
+
+			add $s0, $s0, $v0
+			move $v0, $s0
+			
+			lw $s0, 6($sp)
+			lw $ra, 4($sp)
+			lw $a1, 2($sp)
+			lw $a0, 0($sp)
+			addi $sp, 8
+			jr $ra
+			
+square:
+			addi $sp, -4
+			sw $ra, 2($sp)
+			sw $s0, 0($sp)
+			
+			add $s0, $zero, $zero
+			add $t0, $zero, $zero
+			
+loop:		bne $t0, $a0, loop_cont
+			j square_ret
+loop_cont:	add $s0, $s0, $a0
+			addi $t0, 1
+			j loop
+			
+square_ret:	move $v0, $s0
+			lw $ra, 2($sp)
+			lw $s0, 0($sp)
+			addi $sp, 4
+			jr $ra
+			

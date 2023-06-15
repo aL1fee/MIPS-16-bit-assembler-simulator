@@ -1,0 +1,283 @@
+				.data
+array_size:		.word 25
+array:			.word -340  -104  448  -16437  -102  408  174  -105  -277  -162  -1039  -438  910  -254 3565  371  -1364  2543  643  1628  0 99 -2874 8 31207
+
+print_arr_msg: 	.asciiz "Printing the array:\n"
+print_arr_msg2: .asciiz "\nSorting the array...\n"
+print_arr_msg3:	.asciiz "\nReversing the array...\n"
+blank_char:		.asciiz " "
+error_msg:		.asciiz "Error!\n"
+new_line:		.asciiz "\n"
+
+				.text
+main:
+			la $s0, array_size
+			lw $s0, ($s0)		
+			la $s1, array
+			
+			move $a0, $s0
+			move $a1, $s1
+
+			jal print_array
+
+			move $t2, $a0
+			la $t1, print_arr_msg2
+			move $a0, $t1
+			li $v0, 4
+			syscall
+			move $a0, $t2
+
+			jal insertion_sort
+			jal print_array
+			
+			move $t2, $a0
+			la $t1, print_arr_msg3
+			move $a0, $t1
+			li $v0, 4
+			syscall
+			move $a0, $t2
+			
+			jal reverse_array
+			jal print_array
+			
+			li $v0, 10
+			syscall
+		
+
+# Sort an array in an increasing order using insertion sort: a0 = array size, $a1 = array address
+insertion_sort:
+			addi $sp, -14
+			sw $s3, 12($sp)
+			sw $s2, 10($sp)
+			sw $s1, 8($sp)
+			sw $s0, 6($sp)
+			sw $ra, 4($sp)
+			sw $a1, 2($sp)
+			sw $a0, 0($sp)
+			
+			li $s0, 1					# $s0 is index i = 1
+			li $s1, 1					# $s1 is index j = 1
+		
+			move $s2, $a0				# $s2 is the array size
+			move $t2, $a1				# $t2 is array base address
+			move $t3, $a1				# $t3 is array base address
+			
+s_o_l_c: 	bne $s0, $s2, s_o_l			# if i != size - 1 (sort outer loop condition)
+			j .sort_ret
+
+s_o_l:		move $s1, $s0				# j = i (sort outer loop)
+								
+s_i_l_c:	bne $s1, $zero,  s_i_l_1	# while j != 0   <=>   while j > 0
+
+			addi $s0, 1					# increment i						
+			j s_o_l_c 
+			
+s_i_l_1:	move $t0, $s1				# t0 = j
+			addi $t0, -1				# t0 = j - 1
+			li $a0, 2
+			move $a1, $t0
+			
+			jal multiply				# calculating offset of j - 1 (2 * [j - 1])
+			
+			move $t0, $v0				# $t0 = offset of j - 1
+
+			li $a0, 2
+			move $a1, $s1
+			
+			addi $sp, -2
+			sw $t0, 0($sp)
+			
+			jal multiply 				# calculating offset oj j (2 * j)
+	
+			lw $t0, 0($sp)
+			addi $sp, 2
+			
+			move $t1, $v0				# $t1 = offset of j
+			
+			add $t2, $t2, $t0			# $t2 = address of j - 1
+			add $t3, $t3, $t1			# $t3 = address of j
+	
+			lw $s3, ($t2)				# load array[j - 1]
+			lw $s4, ($t3)				# load array[j]
+
+			ble $s3, $s4, s_i_l_2
+			sub $t2, $t2, $t0			# returning to base address
+			sub $t3, $t3, $t1			# returning to base address
+			
+			addi $s1, -1				# j = j - 1
+			j s_i_l_c
+			
+s_i_l_2:	move $a0, $t2
+			move $a1, $t3
+
+			sub $t2, $t2, $t0			# returning to base address
+			sub $t3, $t3, $t1			# returning to base address
+
+			addi $sp, -4
+			sw $t0, 2($sp)
+			sw $t1, 0($sp)
+			
+			jal swap
+			
+			lw $t0, 2($sp)
+			lw $t1, 0($sp)
+			addi $sp, 4
+			
+			addi $s1, -1				# j = j - 1
+			j s_i_l_c
+
+			
+.sort_ret:  lw $s3, 12($sp)
+			lw $s2, 10($sp)
+			lw $s1, 8($sp)
+			lw $s0, 6($sp)
+			lw $ra, 4($sp)
+			lw $a1, 2($sp)
+			lw $a0, 0($sp)	
+			addi $sp, 14
+			
+			jr $ra
+
+
+# Swap two elements of an array: a0 = array address of element 1, a1 = array address of element 2
+swap:
+			lw $t0, ($a0)
+			lw $t1, ($a1)
+			sw $t0, ($a1)
+			sw $t1, ($a0)
+			
+			jr $ra
+		
+	
+# Reverse an array by switching first and last elements: a0 = array size, $a1 = array address
+reverse_array:
+			addi $sp, -14
+			sw $s3, 12($sp)
+			sw $s2, 10($sp)
+			sw $s1, 8($sp)
+			sw $s0, 6($sp)
+			sw $ra, 4($sp)
+			sw $a1, 2($sp)
+			sw $a0, 0($sp)
+			
+			move $s0, $a0				# $s0 = array size
+			move $s1, $a1				# $s1 = array base address
+			move $t3, $s1 				# bad practice!
+			
+			li $t0, 2
+			div $s0, $t0				
+			
+			mflo $s2	 				# $s2 = the index of the middle element of the array
+			addi $s0, -1
+			li $s3, 0					# $s3 = loop count
+				
+rev_loop_c:	bne $s3, $s2, rev_loop
+			j .rev_ret
+
+rev_loop:   li $t0, 2			
+
+			move $a0, $t0
+			move $a1, $s3
+			
+			jal multiply
+		
+			add $s1, $s1, $v0			# address of i
+			move $t2, $v0				# offset of address of i
+		
+		 	li $t0, 2					# arr[1]  <-> arr[array_size - 1]
+			move $a0, $t0				# arr[2]  <-> arr[array_size - 2]
+			move $a1, $s0				# ...
+										# arr[array_size/2]  <-> arr[array_size/2]
+			jal multiply	
+											
+			lw $t0, ($s1)				# element i
+			add $t3, $t3, $v0			# address of array_size - i
+			lw $t1, ($t3)				# element array_size - i
+	
+			sw $t0, ($t3)				# store element i at address of array_size - i
+			sw $t1, ($s1)				# store element array_size - i at adress of i
+		
+			sub $t3, $t3, $v0			#restore size - i original address
+			sub $s1, $s1, $t2			#restore i original address
+			
+			addi $s0, -1				# array size decremented
+			addi $s3, 1					# loop count incremeented
+	
+			j rev_loop_c					
+			
+.rev_ret:   lw $s3, 12($sp)
+			lw $s2, 10($sp)
+			lw $s1, 8($sp)
+			lw $s0, 6($sp)
+			lw $ra, 4($sp)
+			lw $a1, 2($sp)
+			lw $a0, 0($sp)	
+			addi $sp, 14
+			
+			jr $ra
+			
+			
+# Multiplication procedure: a0 = first value (has to be positive!), a1 = second value
+multiply:	
+			add $t1, $zero, $zero
+			li $t0, 0
+loop_mul:	bne $t0, $a0, l_mul
+			j mul_ret
+l_mul:		add $t1, $t1, $a1
+			addi $t0, 1
+			j loop_mul
+mul_ret:	move $v0, $t1
+
+			jr $ra
+			
+			
+# Printing array procedure: a0 = array size, $a1 = array address
+print_array:
+			addi $sp, -10
+			sw $s1, 8($sp)
+			sw $s0, 6($sp)
+			sw $ra, 4($sp)
+			sw $a1, 2($sp)
+			sw $a0, 0($sp)
+					
+			la $t1, print_arr_msg
+			move $a0, $t1
+			li $v0, 4
+			syscall
+			
+			lw $s0, 0($sp)
+			lw $s1, 2($sp)
+			move $t0, $zero
+			
+pr_loop_c:	bne $t0, $s0, pr_loop
+			j .print_ret
+			
+pr_loop:	lw $t1, ($s1)
+			
+			move $a0, $t1	
+			li $v0, 1
+			syscall
+			
+			addi $s1, 2
+			addi $t0, 1		
+			
+			la $t1, blank_char
+			move $a0, $t1
+			li $v0, 4
+			syscall
+			
+			j pr_loop_c		
+			
+.print_ret:	la $t1, new_line
+			move $a0, $t1
+			li $v0, 4
+			syscall
+
+			lw $s1, 8($sp)
+			lw $s0, 6($sp)
+			lw $ra, 4($sp)
+			lw $a1, 2($sp)
+			lw $a0, 0($sp)	
+			addi $sp, 10
+			
+			jr $ra

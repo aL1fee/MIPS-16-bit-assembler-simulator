@@ -1,0 +1,66 @@
+				.data
+array_size:		.word 15
+array:			.word -23 3723 -4 43 3 0 0 242 4343 -186 -347 7558 99 -9 45
+
+print_arr_msg: 	.asciiz "Printing the array:\n"
+blank_char:		.asciiz " "
+
+				.text
+main:
+			la $s0, array_size
+			lw $s0, ($s0)		
+			la $s1, array
+			
+			move $a0, $s0
+			move $a1, $s1
+			
+			jal print_array
+			
+			li $v0, 10
+			syscall
+			
+			
+# Printing array procedure: a0 = size, $a1 = array address
+print_array:
+			addi $sp, -10
+			sw $s1, 8($sp)
+			sw $s0, 6($sp)
+			sw $ra, 4($sp)
+			sw $a1, 2($sp)
+			sw $a0, 0($sp)
+					
+			la $t1, print_arr_msg
+			move $a0, $t1
+			li $v0, 4
+			syscall
+			
+			lw $s0, 0($sp)
+			lw $s1, 2($sp)
+			move $t0, $zero
+			
+loop_cond:	bne $t0, $s0, loop
+			j .print_end
+			
+loop:		lw $t1, ($s1)
+			
+			move $a0, $t1	
+			li $v0, 1
+			syscall
+			
+			addi $s1, 2
+			addi $t0, 1		
+			
+			la $t1, blank_char
+			move $a0, $t1
+			li $v0, 4
+			syscall
+			
+			j loop_cond		
+			
+.print_end:	lw $s1, 8($sp)
+			lw $s0, 6($sp)
+			lw $ra, 4($sp)
+			lw $a1, 2($sp)
+			lw $a0, 0($sp)	
+			addi $sp, 10
+			jr $ra
