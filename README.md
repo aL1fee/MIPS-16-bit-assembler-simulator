@@ -1,6 +1,6 @@
 # MIPS 16 bit assembler simulator
 
-#A 16 bit assembler based on MIPS architecture.
+A 16 bit assembler based on MIPS architecture.
 The assembler reads an assembly language file (specified in constants.h ASSEMBLY_PROGRAM_FILE_LOCATION) and parses it in two passes. In the first pass, it splits pseudo-instructions into regular instructions, converts regular instructions that do not use labels into the machine code, assigns the exact address to each instruction, and creates a symbol table with labels and their respective addresses. The result is saved into doc/assembly_1.obj. In the second pass, the assembler converts all instructions that use labels into the machine code using the addresses for the required labels from the symbol table. The result is saved into doc/assembly_2.obj. 
 After that, the loader reads doc/assembly_2.obj and sets the memory accordingly (data and text portions). Loader’s loadProgram(string filename) method returns a pointer to the memory object which the control unit receives as an argument. The control unit reads the machine code and does the program execution using ALU and other helper classes.
 
