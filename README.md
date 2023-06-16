@@ -9,7 +9,7 @@ The assembler supports the following data types: integers, strings, lists of int
 
 Words are 16-bit or 2-byte long.
 
-The assembler supports the following instructions: 
+The assembler supports the following 16 regular and 3 pseudo instructions: 
 - syscall 
 - div Rs, Rt (divide)
 - mflo Rd (move from low register)
@@ -86,6 +86,8 @@ Memory addresses can be given by:
 - indexed addressing (the offset is always even and less than 2^4 - 1 ): lw $t1, 8($t0)
 
 The address of the top element of the stack is stored in the $sp register. Need to move $sp down to make room for new data when storing it in the stack.
+
+
 
 Below is example of a program that can be executed by the assembler. It calls a procedure that recursively computes a fibonacci number. 
 
