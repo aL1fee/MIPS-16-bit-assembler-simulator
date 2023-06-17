@@ -66,8 +66,7 @@ The simulated CPU has the following general purpose registers:
 - $sp (stack pointer)
 - $ra (return address of the last caller)
 
-Registers $s0-$s4 are used for values that are expected to be preserved across any procedure calls
-Registers $t0-$t3 are used for values that are not expected to be preserved (must be saved by the caller if need to be preserved)
+Registers $s0-$s4 are used for values that are expected to be preserved across any procedure calls. Registers $t0-$t3 are used for values that are not expected to be preserved (must be saved by the caller if need to be preserved)
 
 The CPU has the following extra registers:
 - HI (stores the remainder of division)
