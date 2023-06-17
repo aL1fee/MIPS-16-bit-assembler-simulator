@@ -75,9 +75,9 @@ The CPU has the following extra registers:
 
 
 Memory (RAM) size is 2^12 words (can be expanded):
-- data (data objects; readable/writeable, starts at 1000000000000000, computed in memory as  0000100000000000)
+- data (data objects; readable/writeable, starts at 1000000000000000, represented in memory as  0000100000000000)
 - text (contains only instructions; read-only, starts at 0000000000000000)
-- stack (grows down from that address; readable/writeable, starts at 111111111111111, computed in memory as 0000111111111111)
+- stack (grows down from that address; readable/writeable, starts at 111111111111111, represented in memory as 0000111111111111)
 
 Memory addresses can be given by:
 - symbolic name (label): lw $t0, Label
