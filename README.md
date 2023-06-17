@@ -89,7 +89,7 @@ The address of the top element of the stack is stored in the $sp register. Need 
 
 
 
-Below is example of a program that can be executed by the assembler. It calls a procedure that recursively computes a fibonacci number. 
+Below is an example of a program that is executed by the assembler. It calls a procedure that recursively computes a fibonacci number. 
 
 The pseduocode:
 
