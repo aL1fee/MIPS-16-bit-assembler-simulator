@@ -97,18 +97,18 @@ The pseduocode:
 
 The assembly program:
 
-<img width="758" alt="fib_1" src="https://github.com/aL1fee/MIPS-16-bit-assembler-simulator/assets/47246379/c2785d34-1aed-4b22-aa53-ec42062678ed">
-<img width="789" alt="fib_2" src="https://github.com/aL1fee/MIPS-16-bit-assembler-simulator/assets/47246379/ae36dd1b-6ff8-4af9-9ca7-5cfb129e57b4">
+<img width="760" alt="fib1" src="https://github.com/aL1fee/MIPS-16-bit-assembler-simulator/assets/47246379/7da6302f-7ab2-4129-bf1d-e5682ba4f50a">
+<img width="791" alt="fib2" src="https://github.com/aL1fee/MIPS-16-bit-assembler-simulator/assets/47246379/8953d597-88be-420d-a3b0-716720fb348e">
 
 First assembler pass output:
 
-<img width="178" alt="obj_1" src="https://github.com/aL1fee/MIPS-16-bit-assembler-simulator/assets/47246379/87039412-c91f-4362-b35a-ded513b5599e">
+<img width="176" alt="obj1" src="https://github.com/aL1fee/MIPS-16-bit-assembler-simulator/assets/47246379/a700fe83-6672-4ea2-b2de-71ac40517d6a">
 
 Second assembler pass output:
 
-<img width="145" alt="obj_2" src="https://github.com/aL1fee/MIPS-16-bit-assembler-simulator/assets/47246379/285294bf-b4c5-47f6-922f-8563cf37625a">
+<img width="163" alt="obj2" src="https://github.com/aL1fee/MIPS-16-bit-assembler-simulator/assets/47246379/4e56d5c5-ac92-4f03-ae0c-9e796c553211">
 
 The output:
 
-<img width="220" alt="fib_output" src="https://github.com/aL1fee/MIPS-16-bit-assembler-simulator/assets/47246379/ea3c5820-278c-483d-aedc-33c1cb78c8a3">
+<img width="256" alt="out" src="https://github.com/aL1fee/MIPS-16-bit-assembler-simulator/assets/47246379/2035c14e-5188-48df-85df-adf6d4085eab">
 
